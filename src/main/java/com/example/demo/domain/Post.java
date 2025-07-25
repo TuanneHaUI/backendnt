@@ -37,11 +37,12 @@ public class Post {
     @Column(length = 1000)
     private String content;
 
-    @ElementCollection
-    @CollectionTable(name = "post_images", joinColumns = @JoinColumn(name = "post_id"))
+//    @ElementCollection
+//    @CollectionTable(name = "post_images", joinColumns = @JoinColumn(name = "post_id"))
+//    @Column(name = "image_url")
+//    private List<String> imageUrls;
     @Column(name = "image_url")
-    private List<String> imageUrls;
-
+    private String imageUrl;
     private LocalDateTime createdAt;
 
     private int likeCount;

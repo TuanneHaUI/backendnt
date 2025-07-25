@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,6 +39,7 @@ public class User {
     private String bio; // Mô tả ngắn
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Post> posts;
     // Getter, Setter
 }

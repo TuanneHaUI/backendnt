@@ -51,6 +51,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(
                         authz -> authz
                                 .requestMatchers(whiteList).permitAll()
+                                .requestMatchers("/storage/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/register").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
 
