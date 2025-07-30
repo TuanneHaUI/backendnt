@@ -29,7 +29,6 @@ public class Message {
 
     private String content;
     private String type; // "text", "image", "file", ...
-
     private LocalDateTime createdAt;
 
 }

@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.domain.Post;
 import com.example.demo.domain.User;
 import com.example.demo.domain.request.RegisterRequest;
+import com.example.demo.domain.request.UpdateUserRequest;
 import com.example.demo.domain.response.ResProfileDTO;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.util.errors.IdInvalidException;
@@ -18,10 +19,12 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final PostService postService;
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, PostService postService) {
+    private final FriendService friendService;
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, PostService postService, FriendService friendService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.postService = postService;
+        this.friendService = friendService;
     }
     public User handleFindUserByEmail(String email) {
         return userRepository.findByEmail(email); // Có thể trả về null
@@ -56,6 +59,7 @@ public class UserService {
         }
         List<String> imagesPost = new ArrayList<>();
         AtomicLong totalPost = new AtomicLong();
+
         currentPost.forEach(post -> {
             if (post.getImageUrl() != null) {
                 imagesPost.add(post.getImageUrl());
@@ -64,6 +68,19 @@ public class UserService {
         });
         resProfileDTO.setUrlImages(imagesPost);
         resProfileDTO.setPost(totalPost.intValue());
+        resProfileDTO.setFollowing(this.friendService.getTotalFriends(currentUser.getId()));
+        resProfileDTO.setFollower(this.friendService.getTotalPendingFriends(currentUser.getId()));
         return resProfileDTO;
+    }
+
+    public User handleUpdateUser(String email, UpdateUserRequest updateUserRequest, String fileName){
+        User currentUser = handleFindUserByEmail(email);
+        if(currentUser != null){
+            currentUser.setBio(updateUserRequest.getBio() != null ? updateUserRequest.getBio() : currentUser.getBio());
+            currentUser.setUsername(updateUserRequest.getUsername() != null ? updateUserRequest.getUsername() : currentUser.getUsername());
+            currentUser.setAvatarUrl(fileName != null ? fileName : currentUser.getAvatarUrl());
+            return this.userRepository.save(currentUser);
+        }
+        return null;
     }
 }

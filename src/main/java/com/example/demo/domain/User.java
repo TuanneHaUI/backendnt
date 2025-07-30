@@ -49,13 +49,13 @@ public class User {
     @JsonIgnore
     private List<Post> posts;
 
-    // User này follow nhiều người khác
-    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
+    // Lời mời kết bạn được gửi đi
+    @OneToMany(mappedBy = "requester", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Follow> followingList;
+    private List<Friendship> sentFriendRequests;
 
-    // Có nhiều người follow user này
-    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, orphanRemoval = true)
+    // Lời mời kết bạn nhận được
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Follow> followerList;
+    private List<Friendship> receivedFriendRequests;
 }
