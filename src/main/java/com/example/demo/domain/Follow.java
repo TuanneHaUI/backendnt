@@ -1,32 +1,39 @@
 package com.example.demo.domain;
 
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-
 @Entity
-@Table(name = "follows")
+@Table(name = "follows", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"follower_id", "following_id"})
+})
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Follow {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "follower_id")
+    // Người đi follow
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "follower_id", nullable = false)
     private User follower;
 
-    @ManyToOne
-    @JoinColumn(name = "following_id")
+    // Người được follow
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "following_id", nullable = false)
     private User following;
 
+    @Column(nullable = false)
     private LocalDateTime followedAt;
 
-    // Getters & Setters
+    @PrePersist
+    protected void onCreate() {
+        this.followedAt = LocalDateTime.now();
+    }
 }

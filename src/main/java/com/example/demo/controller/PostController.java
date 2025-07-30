@@ -62,7 +62,6 @@ public class PostController {
         this.fileService.createDirectory(baseURI + folder);
         // store file
         String uploadFile = this.fileService.store(file, folder);
-
         // Lấy user hiện tại
         String email = SecurityUtil.getCurrentUserLogin().orElse(null);
         if (email == null) {
@@ -71,7 +70,7 @@ public class PostController {
 
         User author = userService.handleFindUserByEmail(email);
         if(author != null){
-            return ResponseEntity.ok(this.postService.handleCreatePost(postDto,author,fileName));
+            return ResponseEntity.ok(this.postService.handleCreatePost(postDto,author,uploadFile));
         }
         return ResponseEntity.ok("null");
     }

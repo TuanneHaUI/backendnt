@@ -34,4 +34,7 @@ public class PostService {
     public List<Post> handleGetPost(){
         return this.postRepository.findAll();
     }
+    public List<Post> handleGetPostByIdUser(User user){
+        return this.postRepository.findByAuthor(user);
+    }
 }

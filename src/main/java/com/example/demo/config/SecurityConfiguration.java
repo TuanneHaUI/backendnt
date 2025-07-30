@@ -31,7 +31,6 @@ public class SecurityConfiguration {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        System.out.println("==================>>>>>>>>Ứng dụng đã được khởi tạo<<<<<<<<<========================");
         return new BCryptPasswordEncoder();
     }
 
@@ -41,7 +40,9 @@ public class SecurityConfiguration {
             CustomAuthenticationEntryPoint customAuthenticationEntryPoint) throws Exception {
 
         String[] whiteList = {
-                "/"
+                "/",
+                "/storage/**",
+                "/auth/refresh"
 
         };
 
@@ -51,7 +52,6 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(
                         authz -> authz
                                 .requestMatchers(whiteList).permitAll()
-                                .requestMatchers("/storage/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/register").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
 

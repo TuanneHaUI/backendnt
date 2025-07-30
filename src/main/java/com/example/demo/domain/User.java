@@ -2,10 +2,7 @@ package com.example.demo.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -16,30 +13,49 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String username;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(nullable = false)
     private String password;
 
     private String avatarUrl;
+
     private String refreshToken;
-    // Các quan hệ
-    @OneToMany(mappedBy = "sender")
+
+    @Column(length = 500)
+    private String bio;
+
+    // User gửi nhiều tin nhắn
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Message> messages;
 
+    // User tham gia nhiều cuộc hội thoại
     @ManyToMany(mappedBy = "participants")
+    @JsonIgnore
     private List<Conversation> conversations;
-    @Column(length = 500)
-    private String bio; // Mô tả ngắn
 
+    // User đăng nhiều bài viết
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Post> posts;
-    // Getter, Setter
+
+    // User này follow nhiều người khác
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Follow> followingList;
+
+    // Có nhiều người follow user này
+    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Follow> followerList;
 }
