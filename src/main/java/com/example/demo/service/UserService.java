@@ -19,8 +19,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final PostService postService;
-    private final FriendService friendService;
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, PostService postService, FriendService friendService) {
+    private final FriendshipService friendService;
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, PostService postService, FriendshipService friendService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.postService = postService;
